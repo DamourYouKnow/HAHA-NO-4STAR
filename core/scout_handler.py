@@ -48,10 +48,7 @@ class PlayHandler:
         self._args = parse_arguments(self._bot, args, True)
 
     async def do_scout(self):
-        if self._count > 1:
-            return await self._handle_multiple_play()
-        else:
-            return await self._handle_solo_play()
+        return await self._handle_multiple_play()
 
     async def _handle_multiple_play(self):
         """
@@ -84,7 +81,7 @@ class PlayHandler:
 
         card = card[0]
 
-        url = "https:" + card["art"]
+        url = card["art"]
 
         fname = basename(urlsplit(url).path)
         image_path = member_img_path.joinpath(fname)

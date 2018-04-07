@@ -139,8 +139,8 @@ class UserController(DatabaseController):
             return False
 
         # Get new counts.
-       count = card['count'] - 1
-       if count < 0:
+        count = card['count'] - 1
+        if count < 0:
             return False
 
         # Update values

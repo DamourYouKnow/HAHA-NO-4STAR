@@ -1,6 +1,6 @@
 ALIASES = {
     'name': {},
-    'main_unit': {
+    'i_band': {
         'poppin': "Poppin' Party",
         "poppin'": "Poppin' Party",
         "popping'": "Poppin' Party",
@@ -14,7 +14,7 @@ ALIASES = {
         'pastel*palettes': 'Pastel*Palettes',
         'roselia': 'Roselia'
     },
-    'rarity': {
+    'i_rarity': {
         '1star': 1,
         '2star': 2,
         '3star': 3,
@@ -75,6 +75,7 @@ def _parse_argument(bot, arg: str) -> list:
             return [(key, search_result)]
 
     # Check for names/surnames
+    print(bot.member_names)
     for full_name in bot.member_names:
         name_split = full_name.split(' ')
         if arg.title() in name_split:
@@ -90,9 +91,11 @@ def _parse_argument(bot, arg: str) -> list:
     # Check for attribute
     if arg in ('cool', 'smile', 'pure'):
         return [('i_attribute', arg.title())]
+    if arg in ('power, powerful'):
+        return [('i_attribute', arg.title())]
 
     # Check for rarity
-    if arg.lower() in ALIASES['rarity'].items():
-        return [('i_rarity', ALIASES['rarity'][arg.lower()])]
+    if arg.lower() in ALIASES['i_rarity'].items():
+        return [('i_rarity', ALIASES['i_rarity'][arg.lower()])]
 
     return []

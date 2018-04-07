@@ -35,7 +35,7 @@ class Play:
         await self.bot.db.users.add_to_user_album(
                 ctx.message.author.id, results)
 
-    @commands.command(pass_context=True, aliases=['1play'])
+    @commands.command(pass_context=True, aliases=['1play', 'play'])
     @commands.cooldown(rate=5, per=2.5, type=commands.BucketType.user)
     @commands.check(check_mongo)
     async def play1(self, ctx, *args: str):
@@ -51,11 +51,11 @@ class Play:
             Year (first, second, third)
         """
         play = PlayHandler(
-            self.bot, ctx.message.author, 'play', 1, False, args)
+            self.bot, ctx.message.author, 'star', 1, False, args)
         image = await play.do_scout()
         await self.__handle_result(ctx, play.results, image)
 
-    @commands.command(pass_context=True, aliases=['play10'])
+    @commands.command(pass_context=True, aliases=['10play'])
     @commands.cooldown(rate=3, per=2.5, type=commands.BucketType.user)
     @commands.check(check_mongo)
     async def play10(self, ctx, *args: str):
@@ -71,6 +71,6 @@ class Play:
             Year (first, second, third)
         """
         play = PlayHandler(
-            self.bot, ctx.message.author, 'play', 10, True, args)
+            self.bot, ctx.message.author, 'star', 10, True, args)
         image = await play.do_scout()
         await self.__handle_result(ctx, play.results, image)

@@ -19,7 +19,7 @@ SORTS = [
     'name',
     'attribute',
     'rarity',
-    'year',
+    'school_year',
     'date',
     'band',
     'newest'
@@ -136,13 +136,13 @@ class Album:
         if card:
             img_url = None
             if trained and card['art_trained']:
-                image_url = card['art_trained']
+                img_url = card['art_trained']
             else:
-                image_url = card['art']
+                img_url = card['art']
 
-            if image_url:
+            if img_url:
                 fname = basename(urlsplit(img_url).path)
-                image_path = member_img_path.joinpath(fname)
+                image_path = member_img_path.joinpath(str(fname))
                 image = await get_one_img(
                         img_url, image_path, self.bot.session_manager)
 
@@ -198,14 +198,15 @@ def _apply_sort(album: list, user: User) -> list:
         sort = 'i_band'
     if sort == 'newest':
         sort = 'time_aquired'
+    if sort == 'attribute':
+        sort = 'i_attribute'
 
     sort_descending = sort in [
-        'rarity',
-        'attribute',
+        'i_rarity',
+        'i_attribute',
         'release_date',
         'time_aquired',
-        'main_unit',
-        'sub_unit'
+        'i_band'
     ]
 
     return sorted(album, key=itemgetter(sort, 'id'), reverse=sort_descending)

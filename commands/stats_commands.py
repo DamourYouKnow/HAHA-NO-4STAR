@@ -25,7 +25,7 @@ class Stats:
         stats.append(('Total cards', counter.total_count))
 
         for rarity, count in counter.rarity_counts.items():
-            stats.append((rarity + ' cards', count))
+            stats.append((str(rarity) + ' star cards', count))
 
         for attribute, count in counter.attribute_counts.items():
             stats.append((attribute + ' cards', count))
@@ -53,13 +53,13 @@ class AlbumCounter:
     def __init__(self, album):
         self.album = album
         self.rarity_counts = {
-            '1 star': 0, 
-            '2 Star': 0, 
-            '3 Star': 0, 
-            '4 Star': 0
+            1: 0, 
+            2: 0, 
+            3: 0, 
+            4: 0
         }
         self.attribute_counts = {
-            'Powerful': 0, 
+            'Power': 0, 
             'Pure': 0,
             'Cool': 0, 
             'Happy': 0
@@ -71,8 +71,8 @@ class AlbumCounter:
         for card in self.album:
             curr_count = card['count']
             self.total_count += 1
-            self.rarity_counts[card['rarity']] += curr_count
-            self.attribute_counts[card['attribute']] += curr_count
+            self.rarity_counts[card['i_rarity']] += curr_count
+            self.attribute_counts[card['i_attribute']] += curr_count
 
         self.distinct_count = len(self.album)
 

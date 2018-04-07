@@ -84,5 +84,5 @@ class CardController(DatabaseController):
         """
         return await self._collection.distinct('_id')
 
-    async def get_idol_names(self) -> list:
+    async def get_member_names(self) -> list:
         return await self._collection.distinct('member.name')

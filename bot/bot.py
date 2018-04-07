@@ -82,7 +82,7 @@ class HahaNo4Star(Bot):
         self.logger.log(logging.INFO, 'Logged in')
         self.logger.log(logging.INFO, f'{len(self.servers)} servers detected')
         self.help_general, self.all_help = get_help(self)
-        self.idol_names = await self.db.cards.get_idol_names()
+        self.member_names = await self.db.cards.get_member_names()
         await self.__change_presence()
 
     async def process_commands(self, message):

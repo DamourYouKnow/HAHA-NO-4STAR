@@ -8,14 +8,14 @@ from urllib.parse import urlsplit
 from PIL import Image, ImageDraw, ImageFont
 
 from bot import SessionManager
-from idol_images import member_img_path
+from member_images import member_img_path
 
 CIRCLE_DISTANCE = 10
 LABEL_COLOURS = {
-    "Powerful": "#FF6698", 
+    "Power": "#FF6698", 
     "Pure": "#77EE87", 
     "Cool": "#66CCEE",
-    "Happy": "#CC76E4"
+    "Happy": "#FD8424"
 }
 
 # TODO seperate function that album_command calls.
@@ -39,7 +39,7 @@ async def create_image(session_manager: SessionManager, cards: list,
         image_field = 'image'
         count_field = 'count'
 
-        url = "http:" + card[image_field]
+        url = card[image_field]
         url_path = Path(urlsplit(url).path)
         file_path = member_img_path.joinpath(url_path.name)
         next_img = Image.open(
@@ -86,7 +86,7 @@ def _add_label(img: Image, texts: list, colour: str):
 
     :param img: Image to add label to.
     """
-    label = _create_label(100, 25, texts, colour, '#000000')
+    label = _create_label(110, 35, texts, colour, '#000000')
     img = img.convert('RGBA')
     temp_canvas = Image.new('RGBA', img.size)
 
@@ -169,7 +169,7 @@ def _compute_label_font_size(label: Image, texts: List, font_type: str) -> int:
         font_width, font_height = font.getsize(max_str)
 
     #return font_size - 1
-    return 18 # FIXME I'm too tired for this shit right now.
+    return 24 # FIXME I'm too tired for this shit right now.
 
 
 def _build_image(circle_images: list, num_rows: int,

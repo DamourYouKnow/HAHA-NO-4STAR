@@ -18,5 +18,5 @@ class ServerController(DatabaseController):
         server = await self._collection.find_one({'_id': server_id})
         if server and server['command_prefix']:
             return server['command_prefix']
-        return '!'
+        return '$'
             

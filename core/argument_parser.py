@@ -75,7 +75,6 @@ def _parse_argument(bot, arg: str) -> list:
             return [(key, search_result)]
 
     # Check for names/surnames
-    print(bot.member_names)
     for full_name in bot.member_names:
         name_split = full_name.split(' ')
         if arg.title() in name_split:

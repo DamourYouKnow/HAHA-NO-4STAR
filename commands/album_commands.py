@@ -201,7 +201,7 @@ def _apply_sort(album: list, user: User) -> list:
     if sort == 'attribute':
         sort = 'i_attribute'
     if sort == 'rarity':
-        sort == 'i_rarity'
+        sort = 'i_rarity'
 
     sort_descending = sort in [
         'i_rarity',

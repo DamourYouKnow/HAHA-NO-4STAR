@@ -31,25 +31,19 @@ def update_task():
             if len(new_member_ids) > 0:
                 new_member_ids = new_member_ids[:MAX_UPDATE_SIZE]
                 print('Getting members ' + str(new_member_ids))
-                req = requests.get(
-                        url=API + 'members',
-                        params={'ids':','.join(str(i) for i in new_member_ids)})
-                res = json.loads(req.text)
-
-                for member in res['results']:
-                    upsert_member(db, member)
+                for i in new_member_ids:
+                    req = requests.get(url=API + 'members/' + str(i))    
+                    res = json.loads(req.text)
+                    upsert_member(db, res)
 
             if len(new_card_ids) > 0:
                 new_card_ids = new_card_ids[:MAX_UPDATE_SIZE]
                 print('Getting cards ' + str(new_card_ids))
-                req = requests.get(
-                        url=API + 'cards',
-                        params={'ids': ','.join(str(i) for i in new_card_ids)})
-                res = json.loads(req.text)
-
-                for card in res['results']:
-                    if validate_card(card):
-                        upsert_card(db, card)
+                for i in new_card_ids:
+                    req = requests.get(API + 'cards/' + str(i))                
+                    res = json.loads(req.text)
+                    if validate_card(res):
+                        upsert_card(db, res)
 
 
      

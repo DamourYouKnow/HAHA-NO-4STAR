@@ -51,13 +51,13 @@ class Album:
             page = _last_user_args[ctx.message.author.id]["page"]
             max_page = int(math.ceil(album_size / PAGE_SIZE))
             msg = (f'<@{ctx.message.author.id}> Page {page+1} of {max_page}. '
-                   f'`!help album` for more info.')
+                   f'`$help album` for more info.')
             await self.bot.upload(image, filename='a.png', content=msg)
 
     async def __handle_view_result(self, ctx, image):
         if not image:
             msg = ('Could not find card in album. '
-                   f'`!help view` for more info.')
+                   f'`$help view` for more info.')
             await self.__send_error_msg(ctx, msg)
         else:
             msg = f'<@{ctx.message.author.id}>'
@@ -66,7 +66,7 @@ class Album:
     async def __handle_train_result(self, ctx, image):
         if not image:
             msg = ('Could not train card. '
-                   f'`!help train` for more info.')
+                   f'`$help train` for more info.')
             await self.__send_error_msg(ctx, msg)
         else:
             msg = f'<@{ctx.message.author.id}>'

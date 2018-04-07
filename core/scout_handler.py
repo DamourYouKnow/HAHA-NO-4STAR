@@ -182,18 +182,13 @@ class PlayHandler:
         required_roll = RATES[self._box][2] + RATES[self._box][3]
         required_roll += RATES[self._box][4]
         if roll < required_roll:
-            return 2
-
-        required_roll = RATES[self._box][1] + RATES[self._box][2]
-        required_roll += RATES[self._box][3] + RATES[self._box][4]
-        if roll < required_roll:
             if guaranteed_sr:
                 return 3
             else:
                 return 2
-        else:
-            return 1 # What the fuck?
 
+        else:
+            return 1
 
 def _get_adjusted_play(play: list, required_count: int) -> list:
     """

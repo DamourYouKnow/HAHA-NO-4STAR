@@ -12,7 +12,7 @@ from core.image_generator import create_image, get_one_img, \
     member_img_path
 
 RATES = {
-    "star": {1: 0.00, 2: 0.855, 3: 0.085, 4: 0.03},
+    "star": {1: 0.00, 2: 0.885, 3: 0.085, 4: 0.03},
 }
 
 

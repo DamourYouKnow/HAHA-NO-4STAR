@@ -48,17 +48,16 @@ class CardController(DatabaseController):
         """
         search = {'_id': {'$in': card_ids}}
         show = {
-            'idol.name': 1,
-            'idol.year': 1,
-            'idol.main_unit': 1,
-            'idol.sub_unit': 1,
-            'rarity': 1,
-            'attribute': 1,
-            'card_image': 1,
+            'member.name': 1,
+            'member.i_school_year': 1,
+            'member.i_band': 1,
+            'i_rarity': 1,
+            'i_attribute': 1,
             'release_date': 1,
-            'card_idolized_image': 1,
-            'round_card_image': 1,
-            'round_card_idolized_image': 1
+            'image': 1,
+            'image_trained': 1,
+            'art': 1,
+            'art_trained': 1
         }
         cursor = self._collection.find(search, show)
         return await cursor.to_list(None)
@@ -86,4 +85,4 @@ class CardController(DatabaseController):
         return await self._collection.distinct('_id')
 
     async def get_idol_names(self) -> list:
-        return await self._collection.distinct('idol.name')
+        return await self._collection.distinct('member.name')

@@ -5,7 +5,7 @@ from data_controller.feedback_controller import FeedbackController
 from data_controller.server_controller import ServerController
 
 PORT = 27017
-DATABASE_NAME = "haha-no-ur"
+DATABASE_NAME = "haha-no-4star"
 
 class MongoClient:
     def __init__(self):

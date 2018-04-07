@@ -1,7 +1,7 @@
 from pymongo import MongoClient
 
 client = MongoClient('localhost', 27017)
-db = client['haha-no-ur']
+db = client['haha-no-4star']
 col = db['users']
 
 user_ids = col.find().distinct('_id')

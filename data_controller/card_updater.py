@@ -13,7 +13,7 @@ def update_task():
         client = None
         try:
             client = MongoClient('localhost', 27017)
-            db = client['haha-no-ur']
+            db = client['haha-no-4star']
 
              # Get card ids from database and api.
             db_card_ids = set(get_card_ids(db))
@@ -66,8 +66,8 @@ def upsert_card(db, card: dict):
 
 
 def validate_card(card: dict) -> bool:
-    if not card['card_image'] and not card['card_idolized_image']:
+    if not card['image'] and not card['image_trained']:
         return False
-    if not card['round_card_image'] and not card['round_card_idolized_image']:
+    if not card['art'] and not card['art_trained']:
         return False
     return True

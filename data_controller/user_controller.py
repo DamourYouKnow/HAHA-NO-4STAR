@@ -99,19 +99,11 @@ class UserController(DatabaseController):
         :param idolized: Whether the new cards being added are idolized.
         """
         for card in new_cards:
-            if card['card_image'] == None:
-                idolized = True
-
             # User does not have this card, push to album
             if not await self._user_has_card(user_id, card['_id']):
-                uc, ic = 1, 0
-                if idolized:
-                    uc, ic = 0, 1
-
                 new_card = {
                     'id': card['_id'],
-                    'unidolized_count': uc,
-                    'idolized_count': ic,
+                    'count': 1,
                     'time_aquired': int(round(time.time() * 1000))
                 }
 
@@ -125,16 +117,10 @@ class UserController(DatabaseController):
 
             # User has this card, increment count
             else:
-                if idolized:
-                    await self._collection.update(
-                        {'_id': user_id, 'album.id': card['_id']},
-                        {'$inc': {'album.$.idolized_count': 1}}
-                    )
-                else:
-                    await self._collection.update(
-                        {'_id': user_id, 'album.id': card['_id']},
-                        {'$inc': {'album.$.unidolized_count': 1}}
-                    )
+                await self._collection.update(
+                    {'_id': user_id, 'album.id': card['_id']},
+                    {'$inc': {'album.$.count': 1}}
+                )
 
     async def remove_from_user_album(self, user_id: str, card_id: int,
                                      idolized: bool=False,
@@ -153,20 +139,16 @@ class UserController(DatabaseController):
             return False
 
         # Get new counts.
-        new_unidolized_count = card['unidolized_count']
-        new_idolized_count = card['idolized_count']
-        if idolized:
-            new_idolized_count -= count
-        else:
-            new_unidolized_count -= count
+       count = card['count'] - 1
+       if count < 0:
+            return False
 
         # Update values
         await self._collection.update(
             {'_id': user_id, 'album.id': card_id},
             {
                 '$set': {
-                    'album.$.unidolized_count': new_unidolized_count,
-                    'album.$.idolized_count': new_idolized_count
+                    'album.$.count': count,
                 }
             }
         )
@@ -199,7 +181,7 @@ class UserController(DatabaseController):
 
         for i in range(0, len(album)):
             for key in card_infos[i]:
-                if key == 'idol':
+                if key == 'member':
                     for idol_key in card_infos[i][key]:
                         album[i][idol_key] = card_infos[i][key][idol_key]
                 else:

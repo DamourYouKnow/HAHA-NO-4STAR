@@ -12,10 +12,10 @@ from idol_images import member_img_path
 
 CIRCLE_DISTANCE = 10
 LABEL_COLOURS = {
-    "Smile": "#FF6698", 
+    "Powerful": "#FF6698", 
     "Pure": "#77EE87", 
     "Cool": "#66CCEE",
-    "All": "#CC76E4"
+    "Happy": "#CC76E4"
 }
 
 # TODO seperate function that album_command calls.
@@ -36,16 +36,8 @@ async def create_image(session_manager: SessionManager, cards: list,
 
     imgs = []
     for card in cards:
-        image_field = 'round_card_image'
-        count_field = 'unidolized_count'
-        idolized = ('idolized' in card and card['idolized'])
-       
-        no_img = (idolized or card['card_image'] == None or card['round_card_image'] == None)
-        if no_img:
-            image_field = 'round_card_idolized_image'
-
-        if idolized:
-            count_field = 'idolized_count'
+        image_field = 'image'
+        count_field = 'count'
 
         url = "http:" + card[image_field]
         url_path = Path(urlsplit(url).path)
@@ -56,7 +48,7 @@ async def create_image(session_manager: SessionManager, cards: list,
         if add_labels:
             texts = [str(card['_id']), str(card[count_field])]
             next_img = _add_label(
-                    next_img, texts, LABEL_COLOURS[card['attribute']])
+                    next_img, texts, LABEL_COLOURS[card['i_attribute']])
 
         imgs.append(next_img)
 

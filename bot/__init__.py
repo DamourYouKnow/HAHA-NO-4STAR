@@ -1,6 +1,6 @@
 from .bot import HahaNo4Star
 from .session_manager import SessionManager, get_session_manager
 
-__title__ = 'Haha-No-UR'
+__title__ = 'HAHA NO 4STAR'
 
-__all__ = ['HahaNoUR', 'SessionManager', 'get_session_manager', '__title__']
+__all__ = ['HahaNo4Star', 'SessionManager', 'get_session_manager', '__title__']

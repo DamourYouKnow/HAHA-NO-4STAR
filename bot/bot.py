@@ -58,7 +58,7 @@ class HahaNo4Star(Bot):
         """
         try:
             await self.wait_until_ready()
-            await self.change_presence(game=Game(name='*$info'))
+            await self.change_presence(game=Game(name='$info'))
 
         except ConnectionClosed:
             await self.logout()

@@ -1,10 +1,10 @@
 import discord
 from discord.ext import commands
 from core.checks import check_mongo
-from bot import HahaNoUR
+from bot import HahaNo4Star
 
 class Config:
-    def __init__(self, bot: HahaNoUR):
+    def __init__(self, bot: HahaNo4Star):
         self.bot = bot
 
     @commands.command(pass_context=True)

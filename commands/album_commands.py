@@ -7,10 +7,10 @@ from copy import deepcopy
 from discord import User
 from discord.ext import commands
 
-from bot import HahaNoUR
+from bot import HahaNo4Star
 from core.argument_parser import parse_arguments
 from core.checks import check_mongo
-from core.image_generator import create_image, get_one_img, idol_img_path
+from core.image_generator import create_image, get_one_img, member_img_path
 
 PAGE_SIZE = 16
 ROWS = 4
@@ -21,8 +21,7 @@ SORTS = [
     'rarity',
     'year',
     'date',
-    'unit',
-    'subunit',
+    'band',
     'newest'
 ]
 
@@ -35,7 +34,7 @@ class Album:
     A class to hold all album commands.
     """
 
-    def __init__(self, bot: HahaNoUR):
+    def __init__(self, bot: HahaNo4Star):
         self.bot = bot
 
     async def __send_error_msg(self, ctx, content):
@@ -64,10 +63,10 @@ class Album:
             msg = f'<@{ctx.message.author.id}>'
             await self.bot.upload(image, filename='c.png', content=msg)
 
-    async def __handle_idolize_result(self, ctx, image):
+    async def __handle_train_result(self, ctx, image):
         if not image:
-            msg = ('Could not idolize card. '
-                   f'`!help idolize` for more info.')
+            msg = ('Could not train card. '
+                   f'`!help train` for more info.')
             await self.__send_error_msg(ctx, msg)
         else:
             msg = f'<@{ctx.message.author.id}>'
@@ -83,24 +82,22 @@ class Album:
 
             Your selected filters and sort will be remembered.
             To clear filters, provide the argument <all>.
-            For example, !album bibi third year ur or !album all
+            For example, !album afterglow third year 4star or !album all
 
         Optional Arguments: |
             Page (1, 2, 3, ...)
-            Sort (id, rarity, newest, attribute, year, unit, subunit, date)
-            Main unit name (Aqours, Muse, Saint Snow, A-RISE)
-            Sub unit name (Lily White, CYaRon, ...)
-            Idol first name (Honoka, Chika, ...)
-            Attribute (smile, pure, cool)
+            Sort (id, rarity, newest, attribute, year, band, date)
+            Band name (Poppin' Party, Afterglow, ...)
+            Member first name (Kasumi, Ran, ...)
+            Attribute (powerful, pure, cool, happy)
             Year (first, second, third)
-            Rarity (UR, SSR, SR, R, N)
+            Rarity (1star, 2star, 3star, 4star)
         """
         user = ctx.message.author
         album = await self.bot.db.users.get_user_album(user.id, True)
         _parse_album_arguments(self.bot, args, user)
         album = _apply_filter(album, user)
         album = _apply_sort(album, user)
-        album = _seperate_idolized(album)
         filtered_album_size = len(album)
         album = _splice_page(album, user)
 
@@ -116,95 +113,40 @@ class Album:
         """
         Description: |
             View a card from your album.
-            For example, !view 1200 or !view 1200 idolized.
+            For example, !view 1200 or !view 1200 trained.
 
         Optional Arguments: |
             Card ID (This is the left number of a card in your album)
-            Idolized (Shows the idolized copy if it exist in your album)
+            Trained (Shows the trained copy if it exist in your album)
         """
         user = ctx.message.author
-        idolized = False
+        trained = False
         card_id = 0
 
         # Parse args for card id and idolized.
         for arg in args:
             if _is_number(arg):
                 card_id = int(arg)
-            if arg in ['idolized', 'i']:
-                idolized = True
+            if arg in ['trained', 't']:
+                trained = True
 
         image = None
         card = await self.bot.db.users.get_card_from_album(user.id, card_id)
-        valid = False
+
         if card:
-            unidolized_count = card['unidolized_count']
-            idolized_count = card['idolized_count']
-
-            if idolized:
-                valid = (idolized_count > 0)
+            img_url = None
+            if trained and card['art_trained']:
+                image_url = card['art_trained']
             else:
-                valid = (idolized_count > 0 or unidolized_count > 0)
-                if card['card_image'] == None:
-                    idolized = True
+                image_url = card['art']
 
-        if valid:
-            img_url = ''
-            if idolized:
-                img_url = 'http:' + card['card_idolized_image']
-            elif card:
-                img_url = 'http:' + card['card_image']
-
-            fname = basename(urlsplit(img_url).path)
-            image_path = idol_img_path.joinpath(fname)
-            image = await get_one_img(
-                    img_url, image_path, self.bot.session_manager)
+            if image_url:
+                fname = basename(urlsplit(img_url).path)
+                image_path = member_img_path.joinpath(fname)
+                image = await get_one_img(
+                        img_url, image_path, self.bot.session_manager)
 
         await self.__handle_view_result(ctx, image)
-
-    @commands.command(pass_context=True, aliases=['i'])
-    @commands.cooldown(rate=3, per=2.5, type=commands.BucketType.user)
-    @commands.check(check_mongo)
-    async def idolize(self, ctx, *args: str):
-        """
-        Description: |
-            Idolizes a card in your album. You must have two copies of the card.
-            For example, !idolize 1200.
-
-        Arguments: |
-            Card ID (This is the left number of a card in your album)
-        """
-        user = ctx.message.author
-        card_id = 0
-
-        # Parse args for card id and idolized.
-        for arg in args:
-            if _is_number(arg):
-                card_id = int(arg)
-
-        image = None
-        card = await self.bot.db.users.get_card_from_album(user.id, card_id)
-
-        # Check to make sure the card can actually be idolized.
-        round_img = card['round_card_image']
-        round_card_i_img = card['round_card_idolized_image']
-        if card['card_idolized_image'] == None or round_img == round_card_i_img:
-            await self.__send_error_msg(ctx, 'This card cannot be idolized.')
-            return 
-
-        if card and card['unidolized_count'] >= 2:
-            card['_id'] = card['id']
-            await self.bot.db.users.remove_from_user_album(
-                    user.id, card_id, count=2)
-            await self.bot.db.users.add_to_user_album(
-                    user.id, [card], idolized=True)
-
-            img_url = 'http:' + card['card_idolized_image']
-            fname = basename(urlsplit(img_url).path)
-            image_path = idol_img_path.joinpath(fname)
-            image = await get_one_img(
-                    img_url, image_path, self.bot.session_manager)
-
-        await self.__handle_idolize_result(ctx, image)
 
 
 def _apply_filter(album: list, user: User):
@@ -233,23 +175,6 @@ def _apply_filter(album: list, user: User):
 
     return album
 
-def _seperate_idolized(album: list) -> list:
-    # Looping backwards since we are adding elements
-    for i in range(len(album) - 1, -1, -1):
-        album[i]['idolized'] = False
-        cp = deepcopy(album[i])
-        cp['idolized'] = True
-        album.insert(i + 1, cp)
-
-    # Looping backwards since we are removing elements
-    for i in range(len(album) - 1, -1, -1):
-        # Filter out cards that should not be displayed.
-        if not album[i]['idolized'] and album[i]['unidolized_count'] <= 0:
-            album.pop(i)
-        if album[i]['idolized'] and album[i]['idolized_count'] <= 0:
-            album.pop(i)
-
-    return album
 
 def _apply_sort(album: list, user: User) -> list:
     """
@@ -269,10 +194,8 @@ def _apply_sort(album: list, user: User) -> list:
         return album
     if sort == 'date':
         sort = 'release_date'
-    if sort == 'unit':
-        sort = 'main_unit'
-    if sort == 'subunit':
-        sort = 'sub_unit'
+    if sort == 'band':
+        sort = 'i_band'
     if sort == 'newest':
         sort = 'time_aquired'
 
@@ -343,11 +266,10 @@ def _parse_album_arguments(bot, args: tuple, user: User):
         if arg == 'all':
             filters = {
                 'name': [],
-                'main_unit': [],
-                'sub_unit': [],
-                'year': [],
-                'attribute': [],
-                'rarity': []
+                'i_band': [],
+                'i_school_year': [],
+                'i_attribute': [],
+                'i_rarity': []
             }
 
         # Parse sort
@@ -374,11 +296,10 @@ def _get_new_user_args():
         'page': 0,
         'filters': {
             'name': [],
-            'main_unit': [],
-            'sub_unit': [],
-            'year': [],
-            'attribute': [],
-            'rarity': []
+            'i_band': [],
+            'i_school_year': [],
+            'i_attribute': [],
+            'i_rarity': []
         },
         'sort': None,
         'order': None  # Sort by ID if None

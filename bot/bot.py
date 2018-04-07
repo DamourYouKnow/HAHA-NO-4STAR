@@ -14,12 +14,12 @@ from data_controller.mongo import MongoClient
 from core import argument_parser
 
 
-class HahaNoUR(Bot):
+class HahaNo4Star(Bot):
     def __init__(self, prefix: str, start_time: int, colour: int, logger,
                  session_manager: SessionManager, db: MongoClient,
                  error_log: int, feedback_log: int):
         """
-        Init the instance of HahaNoUR.
+        Init the instance of HahaNo4Star.
         :param prefix: the bot prefix.
         :param start_time: the bot start time.
         :param colour: the colour used for embeds.
@@ -36,7 +36,7 @@ class HahaNoUR(Bot):
         self.help_general = None
         self.all_help = None
         self.db = db
-        self.idol_names = []
+        self.member_names = []
         self.session_manager = session_manager
         # FIXME remove type casting after library rewrite
         self.error_log = Object(str(error_log))
@@ -58,7 +58,7 @@ class HahaNoUR(Bot):
         """
         try:
             await self.wait_until_ready()
-            await self.change_presence(game=Game(name='!scouts'))
+            await self.change_presence(game=Game(name='*play'))
 
         except ConnectionClosed:
             await self.logout()

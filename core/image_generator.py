@@ -8,7 +8,7 @@ from urllib.parse import urlsplit
 from PIL import Image, ImageDraw, ImageFont
 
 from bot import SessionManager
-from idol_images import idol_img_path
+from idol_images import member_img_path
 
 CIRCLE_DISTANCE = 10
 LABEL_COLOURS = {
@@ -49,7 +49,7 @@ async def create_image(session_manager: SessionManager, cards: list,
 
         url = "http:" + card[image_field]
         url_path = Path(urlsplit(url).path)
-        file_path = idol_img_path.joinpath(url_path.name)
+        file_path = member_img_path.joinpath(url_path.name)
         next_img = Image.open(
                 await get_one_img(url, file_path, session_manager))
 

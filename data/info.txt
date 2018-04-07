@@ -1,5 +1,5 @@
-**2018-04-01:**:
-Support ticket scouting is here `!scoutsuppport`.
+**2018-04-07:**:
+We've just launched!
 
 Invite me to your server here: <https://discordapp.com/oauth2/authorize?client_id=311284054333063168&scope=bot&permissions=0>
 

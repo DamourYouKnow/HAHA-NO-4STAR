@@ -1,24 +1,24 @@
 from discord.ext import commands
 
-from bot import HahaNoUR
-from core.scout_handler import ScoutHandler, ScoutImage
+from bot import HahaNo4Star
+from core.scout_handler import PlayHandler, PlayImage
 from core.checks import check_mongo
 
 
-class Scout:
+class Play:
     """
-    A class to hold all Scout commands.
+    A class to hold all Play commands.
     """
 
-    def __init__(self, bot: HahaNoUR):
+    def __init__(self, bot: HahaNo4Star):
         self.bot = bot
 
-    async def __handle_result(self, ctx, results, image: ScoutImage):
+    async def __handle_result(self, ctx, results, image: PlayImage):
         """
-        Handle a scout result.
+        Handle a play result.
         :param ctx: the context.
-        :param results: the scout results.
-        :param image: scout image result.
+        :param results: the play results.
+        :param image: play image result.
         """
         if not image:
             msg = (f'<@{ctx.message.author.id}> '
@@ -35,123 +35,42 @@ class Scout:
         await self.bot.db.users.add_to_user_album(
                 ctx.message.author.id, results)
 
-    @commands.command(pass_context=True)
+    @commands.command(pass_context=True, aliases=['1play'])
     @commands.cooldown(rate=5, per=2.5, type=commands.BucketType.user)
     @commands.check(check_mongo)
-    async def scout(self, ctx, *args: str):
+    async def play1(self, ctx, *args: str):
         """
         Description: |
-            Solo honour scouting.
+            Solo play.
 
-            **Rates:** R: 80%, SR: 15%, SSR: 4%, UR: 1%
+            **Rates:** 2star: 88.5%, 3star: 8.5%,4 star: 3.0%
         Optional Arguments: |
-            Main unit name (Aqours, Muse, Saint Snow, A-RISE)
-            Sub unit name (Lily White, CYaRon, ...)
-            Idol first name (Honoka, Chika, ...)
-            Attribute (smile, pure, cool)
+            Main unit name (Poppin' Party, Afterglow)
+            Idol first name (Kasumi, Ran, ...)
+            Attribute (powerful, pure, cool, happy)
             Year (first, second, third)
         """
-        scout = ScoutHandler(
-            self.bot, ctx.message.author, 'honour', 1, False, args)
-        image = await scout.do_scout()
-        await self.__handle_result(ctx, scout.results, image)
+        play = PlayHandler(
+            self.bot, ctx.message.author, 'play', 1, False, args)
+        image = await play.do_scout()
+        await self.__handle_result(ctx, play.results, image)
 
-    @commands.command(pass_context=True)
+    @commands.command(pass_context=True, aliases=['play10'])
     @commands.cooldown(rate=3, per=2.5, type=commands.BucketType.user)
     @commands.check(check_mongo)
-    async def scout11(self, ctx, *args: str):
+    async def play10(self, ctx, *args: str):
         """
         Description: |
-            10+1 honour scouting.
+            10 play with guaranteed 3 Star.
 
-            **Rates:** R: 80%, SR: 15%, SSR: 4%, UR: 1%
+            **Rates:** 2star: 88.5%, 3star: 8.5%, 4star: 3.0%
         Optional Arguments: |
-            Main unit name (Aqours, Muse, Saint Snow, A-RISE)
-            Sub unit name (Lily White, CYaRon, ...)
-            Idol first name (Honoka, Chika, ...)
-            Attribute (smile, pure, cool)
+            Main unit name (Poppin' Party, Afterglow)
+            Idol first name (Kasumi, Ran, ...)
+            Attribute (powerful, pure, cool, happy)
             Year (first, second, third)
         """
-        scout = ScoutHandler(
-            self.bot, ctx.message.author, 'honour', 11, True, args)
-        image = await scout.do_scout()
-        await self.__handle_result(ctx, scout.results, image)
-
-    @commands.command(pass_context=True, aliases=['scoutr'])
-    @commands.cooldown(rate=5, per=2.5, type=commands.BucketType.user)
-    @commands.check(check_mongo)
-    async def scoutregular(self, ctx, *args: str):
-        """
-        Description: |
-            Solo regular scouting.
-
-            **Rates:** N: 95%, R: 5%
-        Optional Arguments: |
-            Attribute (smile, pure, cool)
-            Idol first name (Honoka, Chika, ...)
-            Year (first, second, third)
-        """
-        scout = ScoutHandler(
-            self.bot, ctx.message.author, 'regular', 1, False, args)
-        image = await scout.do_scout()
-        await self.__handle_result(ctx, scout.results, image)
-
-    @commands.command(pass_context=True, aliases=['scoutr10'])
-    @commands.cooldown(rate=3, per=2.5, type=commands.BucketType.user)
-    @commands.check(check_mongo)
-    async def scoutregular10(self, ctx, *args: str):
-        """
-        Description: |
-            10 card regular scouting.
-
-            **Rates:** N: 95%, R: 5%
-        Optional Arguments: |
-            Attribute (smile, pure, cool)
-            Idol first name (Honoka, Chika, ...)
-            Year (first, second, third)
-        """
-        scout = ScoutHandler(
-            self.bot, ctx.message.author, 'regular', 10, False, args)
-        image = await scout.do_scout()
-        await self.__handle_result(ctx, scout.results, image)
-
-    @commands.command(pass_context=True, aliases=['scoutc'])
-    @commands.cooldown(rate=5, per=2.5, type=commands.BucketType.user)
-    @commands.check(check_mongo)
-    async def scoutcoupon(self, ctx, *args: str):
-        """
-        Description: |
-            Blue scouting coupon scouting.
-
-            **Rates:** SR: 80%, UR: 20%
-        Optional Arguments: |
-            Main unit name (Aqours, Muse, Saint Snow, A-RISE)
-            Sub unit name (Lily White, CYaRon, ...)
-            Idol first name (Honoka, Chika, ...)
-            Attribute (smile, pure, cool)
-            Year (first, second, third)
-        """
-        scout = ScoutHandler(
-            self.bot, ctx.message.author, 'coupon', 1, False, args)
-        image = await scout.do_scout()
-        await self.__handle_result(ctx, scout.results, image)
-
-
-    @commands.command(pass_context=True, aliases=['scouts'])
-    @commands.cooldown(rate=5, per=2.5, type=commands.BucketType.user)
-    @commands.check(check_mongo)
-    async def scoutsupport(self, ctx, *args: str):
-        """
-        Description: |
-            Support scouting.
-
-            **Rates:** R: 60%, SR: 30%, UR: 10%
-        Optional Arguments: |
-            Attribute (smile, pure, cool)
-            Idol first name (Honoka, Chika, ...)
-            Year (first, second, third)
-        """
-        scout = ScoutHandler(
-            self.bot, ctx.message.author, 'support', 1, False, args)
-        image = await scout.do_scout()
-        await self.__handle_result(ctx, scout.results, image)
+        play = PlayHandler(
+            self.bot, ctx.message.author, 'play', 10, True, args)
+        image = await play.do_scout()
+        await self.__handle_result(ctx, play.results, image)

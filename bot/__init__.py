@@ -1,4 +1,4 @@
-from .bot import HahaNoUR
+from .bot import HahaNo4Star
 from .session_manager import SessionManager, get_session_manager
 
 __title__ = 'Haha-No-UR'

@@ -6,42 +6,38 @@ from urllib.parse import urlsplit
 
 from discord import User
 
-from bot import HahaNoUR
+from bot import HahaNo4Star
 from core.argument_parser import parse_arguments
 from core.image_generator import create_image, get_one_img, \
-    idol_img_path
+    member_img_path
 
 RATES = {
-    "regular": {"N": 0.95, "R": 0.05, "SR": 0.00, "SSR": 0.00, "UR": 0.00},
-    "honour": {"N": 0.00, "R": 0.80, "SR": 0.15, "SSR": 0.04, "UR": 0.01},
-    "coupon": {"N": 0.00, "R": 0.00, "SR": 0.80, "SSR": 0.00, "UR": 0.20},
-    "support": {"N": 0.00, "R": 0.60, "SR": 0.30, "SSR": 0.00, "UR": 0.10},
-    "alpaca": {"N": 0.00, "R": 0.85, "SR": 0.15, "SSR": 0.00, "UR": 0.00}
+    "star": {1: 0.00, 2: 0.855, 3: 0.085, 4: 0.03},
 }
 
 
-class ScoutImage(namedtuple('ScoutImage', ('bytes', 'name'))):
+class PlayImage(namedtuple('playImage', ('bytes', 'name'))):
     __slots__ = ()
 
 
-class ScoutHandler:
+class PlayHandler:
     """
     Provides scouting functionality for bot.
     """
     __slots__ = ('results', '_bot', '_user', '_box', '_count',
                  '_guaranteed_sr', '_args')
 
-    def __init__(self, bot: HahaNoUR, user: User,
+    def __init__(self, bot: HahaNo4Star, user: User,
                  box: str = "honour", count: int = 1,
                  guaranteed_sr: bool = False, args: tuple = ()):
         """
-        Constructor for a Scout.
+        Constructor for a Play.
         :param session_manager: the SessionManager.
-        :param user: User requesting scout.
-        :param box: Box to scout in (honour, regular, coupon).
-        :param count: Number of cards in scout.
-        :param guaranteed_sr: Whether the scout will roll at least one SR.
-        :param args: Scout command arguments
+        :param user: User requesting play.
+        :param box: Box to play in (star).
+        :param count: Number of cards in play.
+        :param guaranteed_sr: Whether the play will roll at least one SR.
+        :param args: Play command arguments
         """
         self.results = []
         self._bot = bot
@@ -53,17 +49,17 @@ class ScoutHandler:
 
     async def do_scout(self):
         if self._count > 1:
-            return await self._handle_multiple_scout()
+            return await self._handle_multiple_play()
         else:
-            return await self._handle_solo_scout()
+            return await self._handle_solo_play()
 
-    async def _handle_multiple_scout(self):
+    async def _handle_multiple_play(self):
         """
-        Handles a scout with multiple cards
+        Handles a play with multiple cards
 
-        :return: Path of scout image
+        :return: Path of play image
         """
-        cards = await self._scout_cards()
+        cards = await self._play_cards()
 
         if len(cards) != self._count:
             self.results = []
@@ -71,15 +67,15 @@ class ScoutHandler:
 
         fname = f'{int(time())}{randint(0, 100)}.png'
         _bytes = await create_image(self._bot.session_manager, cards, 2)
-        return ScoutImage(_bytes, fname)
+        return PlayImage(_bytes, fname)
 
-    async def _handle_solo_scout(self):
+    async def _handle_solo_play(self):
         """
         Handles a solo scout
 
         :return: Path of scout image
         """
-        card = await self._scout_cards()
+        card = await self._play_cards()
 
         # Send error message if no card was returned
         if not card:
@@ -88,22 +84,19 @@ class ScoutHandler:
 
         card = card[0]
 
-        if card["card_image"] is None:
-            url = "https:" + card["card_idolized_image"]
-        else:
-            url = "https:" + card["card_image"]
+        url = "https:" + card["art"]
 
         fname = basename(urlsplit(url).path)
-        image_path = idol_img_path.joinpath(fname)
+        image_path = member_img_path.joinpath(fname)
         bytes_ = await get_one_img(
             url, image_path, self._bot.session_manager)
-        return ScoutImage(bytes_, fname)
+        return PlayImage(bytes_, fname)
 
-    async def _scout_cards(self) -> list:
+    async def _play_cards(self) -> list:
         """
-        Scouts a specified number of cards
+        Plays a specified number of cards
 
-        :return: cards scouted
+        :return: cards played
         """
         rarities = []
 
@@ -111,16 +104,10 @@ class ScoutHandler:
             for r in range(self._count - 1):
                 rarities.append(self._roll_rarity())
 
-            if rarities.count("R") + rarities.count("N") == self._count - 1:
+            if rarities.count(1) + rarities.count(2) == self._count - 1:
                 rarities.append(self._roll_rarity(True))
             else:
                 rarities.append(self._roll_rarity())
-
-        # Case where a normal character is selected
-        elif (self._box == "regular") \
-                and len(self._args["name"]) > 0:
-            for r in range(self._count):
-                rarities.append("N")
 
         else:
             for r in range(self._count):
@@ -130,33 +117,30 @@ class ScoutHandler:
 
         for rarity in RATES[self._box].keys():
             if rarities.count(rarity) > 0:
-                scout = await self._scout_request(
+                play = await self._play_request(
                     rarities.count(rarity), rarity
                 )
 
-                results += _get_adjusted_scout(
-                    scout, rarities.count(rarity)
+                results += _get_adjusted_play(
+                    play, rarities.count(rarity)
                 )
 
         self.results = results
         shuffle(results)
         return results
 
-    async def _scout_request(self, count: int, rarity: str) -> dict:
+    async def _play_request(self, count: int, rarity: int) -> dict:
         """
-        Scouts a specified number of cards of a given rarity
+        Plays a specified number of cards of a given rarity
 
-        :param rarity: Rarity of all cards in scout
+        :param rarity: Rarity of all cards in play
 
-        :return: Cards scouted
+        :return: Cards played
         """
         if count == 0:
             return []
-        params = {
-            'rarity': rarity,
-            'is_promo': False,
-            'is_special': (self._box == 'support')
-        }
+
+        params = {'i_rarity': rarity,}
 
         for arg_type, arg_values in self._args.items():
             if not arg_values:
@@ -168,16 +152,14 @@ class ScoutHandler:
             if len(arg_values) > 0:
                 val = {'$in': arg_values}
 
-            if arg_type == "main_unit":
-                params['idol.main_unit'] = val
-            elif arg_type == "sub_unit":
-                params['idol.sub_unit'] = val
+            if arg_type == "i_band":
+                params['member.i_band'] = val
             elif arg_type == "name":
-                params['idol.name'] = val
-            elif arg_type == "year":
-                params['idol.year'] = val
-            elif arg_type == "attribute":
-                params['attribute'] = val
+                params['member.name'] = val
+            elif arg_type == "i_school_year":
+                params['member.i_school_year'] = val
+            elif arg_type == "i_attribute":
+                params['i_attribute'] = val
 
         # Get and return response
         return await self._bot.db.cards.get_random_cards(params, count)
@@ -188,46 +170,46 @@ class ScoutHandler:
 
         :param guaranteed_sr: Whether roll should be an SR
 
-        :return: rarity represented as a string ('UR', 'SSR', 'SR', 'R')
+        :return: rarity represented as a int (1, 2, 3, 4)
         """
         roll = uniform(0, 1)
 
-        required_roll = RATES[self._box]['UR']
+        required_roll = RATES[self._box][4]
         if roll < required_roll:
-            return 'UR'
+            return 4
 
-        required_roll = RATES[self._box]['SSR'] + RATES[self._box]['UR']
+        required_roll = RATES[self._box][3] + RATES[self._box][4]
         if roll < required_roll:
-            return 'SSR'
+            return 3
 
-        required_roll = RATES[self._box]['SR'] + RATES[self._box]['SSR']
-        required_roll += RATES[self._box]['UR']
+        required_roll = RATES[self._box][2] + RATES[self._box][3]
+        required_roll += RATES[self._box][4]
         if roll < required_roll:
-            return 'SR'
+            return 2
 
-        required_roll = RATES[self._box]['R'] + RATES[self._box]['SR']
-        required_roll += RATES[self._box]['SSR'] + RATES[self._box]['UR']
+        required_roll = RATES[self._box][1] + RATES[self._box][2]
+        required_roll += RATES[self._box][3] + RATES[self._box][4]
         if roll < required_roll:
             if guaranteed_sr:
-                return 'SR'
+                return 3
             else:
-                return 'R'
+                return 2
         else:
-            return 'N'
+            return 1 # What the fuck?
 
 
-def _get_adjusted_scout(scout: list, required_count: int) -> list:
+def _get_adjusted_play(play: list, required_count: int) -> list:
     """
     Adjusts a pull of a single rarity by checking if a card should flip to
-    a similar one and by duplicating random cards in the scout if there were
-    not enough scouted.
-    :param scout: List representing the scout.
+    a similar one and by duplicating random cards in the play if there were
+    not enough played.
+    :param play: List representing the play.
         All these cards will have the same rarity.
-    :param required_count: The number of cards that need to be scouted.
-    :return: Adjusted list of cards scouted
+    :param required_count: The number of cards that need to be played.
+    :return: Adjusted list of cards played.
     """
-    # Add missing cards to scout by duplicating random cards already present
-    current_count = len(scout)
+    # Add missing cards to play by duplicating random cards already present
+    current_count = len(play)
 
     # Something bad happened, return an empty list
     if current_count == 0:
@@ -235,18 +217,18 @@ def _get_adjusted_scout(scout: list, required_count: int) -> list:
 
     pool_size = current_count
     while current_count < required_count:
-        scout.append(
-            scout[randint(0, pool_size - 1)]
+        play.append(
+            play[randint(0, pool_size - 1)]
         )
         current_count += 1
 
     # Traverse scout and roll for flips
-    for card_index in range(len(scout) - 1):
+    for card_index in range(len(play) - 1):
         # for each card there is a (1 / total cards)
         # chance that we should dupe
         # the previous card
         roll = uniform(0, 1)
-        if roll < 1 / len(scout):
-            scout[card_index] = scout[card_index + 1]
+        if roll < 1 / len(play):
+            play[card_index] = play[card_index + 1]
 
-    return scout
+    return play

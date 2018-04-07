@@ -1,12 +1,12 @@
 from time import time
 from discord.ext import commands
 from core.checks import check_mongo
-from bot import HahaNoUR
+from bot import HahaNo4Star
 from data import data_path
 
 
 class Info:
-    def __init__(self, bot: HahaNoUR):
+    def __init__(self, bot: HahaNo4Star):
         self.bot = bot
         with data_path.joinpath('info.txt').open() as f:
             self.info_msg = f.read()

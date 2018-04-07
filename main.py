@@ -1,5 +1,5 @@
 '''
-A discord bot for scouting in Love Live: School Idol Festival.
+A discord bot for gacha in Bang Dream: Girls Band Party!
 '''
 from asyncio import get_event_loop
 from json import load
@@ -7,7 +7,7 @@ from time import time
 from threading import Thread
 
 from commands import *
-from bot import HahaNoUR, get_session_manager
+from bot import HahaNo4Star, get_session_manager
 from bot.logger import setup_logging
 from config import config_path
 from data_controller.mongo import MongoClient
@@ -28,14 +28,14 @@ def main():
 
     db = MongoClient() if config.get('mongo', True) else None
 
-    bot = HahaNoUR(
+    bot = HahaNo4Star(
         config['default_prefix'], start_time, int(config['colour'], base=16),
         logger, session_manager, db, auth['error_log'], auth['feedback_log']
     )
 
     bot.remove_command('help')
     cogs = [
-        Scout(bot), 
+        Play(bot), 
         Album(bot), 
         Info(bot), 
         Stats(bot), 

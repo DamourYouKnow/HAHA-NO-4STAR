@@ -1,45 +1,24 @@
 ALIASES = {
-    'name': {
-        'honk': 'Kousaka Honoka',
-        'bird': 'Minami Kotori',
-        'birb': 'Minami Kotori',
-        'eri': 'Ayase Eli',
-        'harasho': 'Ayase Eli',
-        'yohane': 'Tsushima Yoshiko',
-        'hana': 'Koizumi Hanayo',
-        'pana': 'Koizumi Hanayo',
-        'tomato': "Nishikino Maki",
-        'zura': 'Kunikida Hanamaru',
-        'technology': 'Kunikida Hanamaru',
-        'woah': 'Kunikida Hanamaru',
-        'mike': 'Kurosawa Ruby',  # Memes
-        'nell': "Yazawa Nico",
-        'nya': 'Hoshizora Rin'
-    },
+    'name': {},
     'main_unit': {
-        'muse': "μ's",
-        "μ's": "μ's",
-        "µ's": "μ's",
-        'aqours': 'Aqours',
-        'aquas': 'Aqours',
-        'aquors': 'Aqours',
-        'a-rise': 'A-RISE',
-        'arise': 'A-RISE',
-        'saint': 'Saint Snow',
-        'snow': 'Saint Snow'
+        'poppin': "Poppin' Party",
+        "poppin'": "Poppin' Party",
+        "popping'": "Poppin' Party",
+        'party': "Poppin' Party",
+        "afterglow": "Afterglow",
+        "hello": "Hello, Happy World!",
+        "happy": "Hello, Happy World!",
+        "world": "Hello, Happy World!",
+        'pastel': 'Pastel*Palettes',
+        'palettes': 'Pastel*Palettes',
+        'pastel*palettes': 'Pastel*Palettes',
+        'roselia': 'Roselia'
     },
-    'sub_unit': {
-        'lily': 'Lily White',
-        'white': 'Lily White',
-        'bibi': 'Bibi',
-        'printemps': 'Printemps',
-        'guilty': 'Guilty Kiss',
-        'kiss': 'Guilty Kiss',
-        'azalea': 'AZALEA',
-        'cyaron': 'CYaRon!',
-        'cyaron!': 'CYaRon!',
-        'crayon': 'CYaRon!',
-        'crayon!': 'CYaRon!'
+    'rarity': {
+        '1star': 1,
+        '2star': 2,
+        '3star': 3,
+        '4star': 4
     }
 }
 
@@ -50,18 +29,17 @@ def parse_arguments(bot, args: tuple,
     Parse all user arguments
 
     :param args: Tuple of all arguments
-    :param allow_unsupported_lists: Whether parameters that School Idol
-        Tomodachi does not allow multiple values of are reduced.
+    :param allow_unsupported_lists: Whether parameters that the Bang Dream API
+        does not allow multiple values of are reduced.
 
     :return: A list of tuples of (arg_type, arg_value)
     """
     parsed_args = {
         'name': [],
-        'main_unit': [],
-        'sub_unit': [],
-        'year': [],
-        'attribute': [],
-        'rarity': []
+        'i_band': [],
+        'i_school_year': [],
+        'i_attribute': [],
+        'i_rarity': []
     }
 
     for arg in args:
@@ -74,7 +52,7 @@ def parse_arguments(bot, args: tuple,
 
     # Remove mutiple values from fields not supported
     if not allow_unsupported_lists:
-        for key in ('sub_unit', 'attribute', 'year'):
+        for key in ('i_attribute', 'i_school_year'):
             parsed_args[key] = parsed_args[key][:1]
     return parsed_args
 
@@ -97,7 +75,7 @@ def _parse_argument(bot, arg: str) -> list:
             return [(key, search_result)]
 
     # Check for names/surnames
-    for full_name in bot.idol_names:
+    for full_name in bot.member_names:
         name_split = full_name.split(' ')
         if arg.title() in name_split:
             found_args.append(('name', full_name))
@@ -107,16 +85,14 @@ def _parse_argument(bot, arg: str) -> list:
 
     # Check for years
     if arg in ('first', 'second', 'third'):
-        return [('year', arg.title())]
+        return [('i_school_year', arg.title())]
 
     # Check for attribute
     if arg in ('cool', 'smile', 'pure'):
-        return [('attribute', arg.title())]
-    if arg in (':heart:', 'purple'):
-        return [('attribute', 'All')]
+        return [('i_attribute', arg.title())]
 
     # Check for rarity
-    if arg.upper() in ('N', 'R', 'SR', 'SSR', 'UR'):
-        return [('rarity', arg.upper())]
+    if arg.lower() in ALIASES['rarity'].items():
+        return [('i_rarity', ALIASES['rarity'][arg.lower()])]
 
     return []

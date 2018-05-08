@@ -85,11 +85,6 @@ class HahaNo4Star(Bot):
         self.member_names = await self.db.cards.get_member_names()
         await self.__change_presence()
 
-        for server in self.servers:
-            for member in server.members:
-                if member.id == self.user.id:
-                    await self.change_nickname(member, "HAHA NO 4STAR")
-
     async def process_commands(self, message):
         """
         Overwrites the process_commands method to ignore bot users and

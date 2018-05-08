@@ -84,7 +84,11 @@ class HahaNo4Star(Bot):
         self.help_general, self.all_help = get_help(self)
         self.member_names = await self.db.cards.get_member_names()
         await self.__change_presence()
-        await self.change_nickname(self, "HAHA NO 4STAR")
+
+        for server in self.servers:
+            for member in server.members:
+                if member.id == self.id:
+                    await self.change_nickname(self, "HAHA NO 4STAR")
 
     async def process_commands(self, message):
         """

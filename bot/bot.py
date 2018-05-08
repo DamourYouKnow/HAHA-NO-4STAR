@@ -88,7 +88,7 @@ class HahaNo4Star(Bot):
         for server in self.servers:
             for member in server.members:
                 if member.id == self.id:
-                    await self.change_nickname(self, "HAHA NO 4STAR")
+                    await self.change_nickname(member, "HAHA NO 4STAR")
 
     async def process_commands(self, message):
         """

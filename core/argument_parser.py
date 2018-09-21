@@ -91,7 +91,7 @@ def _parse_argument(bot, arg: str) -> list:
     if arg in ('cool', 'smile', 'pure'):
         return [('i_attribute', arg.title())]
     if arg in ('power, powerful'):
-        return [('i_attribute', 'Powerful')]
+        return [('i_attribute', 'Power')]
 
     # Check for rarity
     if arg.lower() in ALIASES['i_rarity'].items():

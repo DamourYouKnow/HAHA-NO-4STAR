@@ -88,7 +88,7 @@ def _parse_argument(bot, arg: str) -> list:
         return [('i_school_year', arg.title())]
 
     # Check for attribute
-    if arg in ('cool', 'smile', 'pure'):
+    if arg in ('cool', 'happy', 'pure'):
         return [('i_attribute', arg.title())]
     if arg in ('power, powerful'):
         return [('i_attribute', 'Power')]

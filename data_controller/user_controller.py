@@ -174,17 +174,29 @@ class UserController(DatabaseController):
         :return: New list of card dictionaries with merged information.
         """
         card_ids = [card['id'] for card in album]
-        card_infos = await self.mongo_client.cards.get_cards(card_ids)
+        db_card_infos = await self.mongo_client.cards.get_cards(card_ids)
+        
+        card_infos = {}
+        for info in db_card_infos:
+            card_infos[info['_id']] = info
 
-        if len(album) != len(card_infos):
-            return []
-
+        rem = []
+        rem_ids = []
         for i in range(0, len(album)):
-            for key in card_infos[i]:
-                if key == 'member':
-                    for idol_key in card_infos[i][key]:
-                        album[i][idol_key] = card_infos[i][key][idol_key]
-                else:
-                    album[i][key] = card_infos[i][key]
+            a_id = album[i]['id']
+            if a_id not in card_infos:
+                rem.append(i)
+                rem_ids.append(a_id)
+                continue
 
+            for key in card_infos[a_id]:
+                if key == 'member':
+                    for idol_key in card_infos[a_id][key]:
+                        album[i][idol_key] = card_infos[a_id][key][idol_key]
+                else:
+                    album[i][key] = card_infos[a_id][key]
+
+        if rem:
+            print("Stripping " + str(rem_ids) + " from album...")
+        [album.pop(i) for i in rem[::-1]]
         return album

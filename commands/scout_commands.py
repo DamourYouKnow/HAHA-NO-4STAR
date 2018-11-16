@@ -74,3 +74,23 @@ class Play:
             self.bot, ctx.message.author, 'star', 10, True, args)
         image = await play.do_scout()
         await self.__handle_result(ctx, play.results, image)
+
+    @commands.command(pass_context=True, aliases=['5play'])
+    @commands.cooldown(rate=3, per=2.5, type=commands.BucketType.user)
+    @commands.check(check_mongo)
+    async def play5(self, ctx, *args: str):
+        """
+        Description: |
+            5 play with guaranteed 3 Star.
+
+            **Rates:** 2star: 88.5%, 3star: 8.5%, 4star: 3.0%
+        Optional Arguments: |
+            Main unit name (Poppin' Party, Afterglow)
+            Idol first name (Kasumi, Ran, ...)
+            Attribute (powerful, pure, cool, happy)
+            Year (first, second, third)
+        """
+        play = PlayHandler(
+            self.bot, ctx.message.author, 'star', 5, True, args)
+        image = await play.do_scout()
+        await self.__handle_result(ctx, play.results, image)

@@ -101,16 +101,13 @@ def _parse_argument(bot, arg: str) -> list:
     for key, val in ALIASES.items():
         search_result = val.get(arg, None)
         if search_result:
-            return [(key, search_result)]
+            found_args.append((key, search_result))
 
     # Check for names/surnames
     for full_name in bot.member_names:
         name_split = full_name.split(' ')
         if arg.title() in name_split:
             found_args.append(('name', full_name))
-
-    if found_args:
-        return found_args
 
     # Check for years
     if arg in ('first', 'second', 'third'):
@@ -127,10 +124,19 @@ def _parse_argument(bot, arg: str) -> list:
         'dj', 'drums', 'guitar', 'guitar/vocals', 'keytar', 'bass', 'keyboard'
     ]
     if arg in instruments:
-        return [('instrument', arg.title())]
+        found_args.append(('instrument', arg.title()))
 
     # Check for rarity
     if arg.lower() in ALIASES['i_rarity'].items():
         return [('i_rarity', ALIASES['i_rarity'][arg.lower()])]
 
-    return []
+    adjusted_args = []
+    for a in range(0, len(found_args)):
+        arg = found_args[a]
+        if arg[0] == 'instrument' and arg[1] == 'Guitar/Vocals':
+            adjusted_args.append(('instrument', 'Vocals'))
+        if arg[0] == 'instrument' and arg[1] == 'Guitar':
+            adjusted_args.append(('instrument', 'Guitar/Vocals'))
+    found_args += adjusted_args
+
+    return found_args

@@ -49,7 +49,7 @@ ALIASES = {
         'guitarist': 'Guitar',
         'drummer': 'Drums',
         'keytarist': 'Keytar',
-        'keyboardist': 'Guitar/Vocals',
+        'keyboardist': 'Keyboard',
         'bassist': 'Bass'
     }
 }

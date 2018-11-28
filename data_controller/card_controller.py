@@ -57,7 +57,8 @@ class CardController(DatabaseController):
             'image': 1,
             'image_trained': 1,
             'art': 1,
-            'art_trained': 1
+            'art_trained': 1,
+            'member.instrument': 1
         }
         cursor = self._collection.find(search, show)
         return await cursor.to_list(None)

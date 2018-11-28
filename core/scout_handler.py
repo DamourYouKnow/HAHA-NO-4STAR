@@ -157,6 +157,8 @@ class PlayHandler:
                 params['member.i_school_year'] = val
             elif arg_type == "i_attribute":
                 params['i_attribute'] = val
+            elif arg_type == "instrument":
+                params['member.instrument'] = val
 
         # Get and return response
         return await self._bot.db.cards.get_random_cards(params, count)

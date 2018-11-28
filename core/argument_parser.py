@@ -1,5 +1,28 @@
 ALIASES = {
-    'name': {},
+    'name': {
+        'misaki': 'Michelle',
+        'rimirin': 'Rimi Ushigome',
+        'choco': 'Rimi Ushigome',
+        'cornet': 'Rimi Ushigome',
+        'o-tao': 'Tae Hanazono',
+        'tsugu': 'Tsugumi Hazawa',
+        'tsugurific': 'Tsugumi Hazawa',
+        'rinrin': 'Rinko Shirokane',
+        'bushido': 'Eve Wakamiya',
+        'fleeting': 'Kaoru Seta',
+        'boppin': 'Hina Hikawa',
+        "boppin'": 'Hina Hikawa',
+        'combo': 'Hina Hikawa',
+        'fc': 'Hina Hikawa',
+        'fuee': 'Kanon Matsubara',
+        'bread': 'Saaya Yamabuki',
+        'saya': 'Saaya Yamabuki',
+        'koko': 'Kokoro Tsurumaki',
+        'fortnite': 'Kokoro Tsurumaki',
+        'hoh': 'Himari Uehara',
+        'gamer': 'Ako Udagawa',
+        'tatoe': 'Yukina Minato'
+    },
     'i_band': {
         'poppin': "Poppin' Party",
         "poppin'": "Poppin' Party",
@@ -19,6 +42,15 @@ ALIASES = {
         '2star': 2,
         '3star': 3,
         '4star': 4
+    },
+    'instrument': {
+        'vocals': 'Guitar/Vocals',
+        'vocalist': 'Guitar/Vocals',
+        'guitarist': 'Guitar',
+        'drummer': 'Drums',
+        'keytarist': 'Keytar',
+        'keyboardist': 'Guitar/Vocals',
+        'bassist': 'Bass'
     }
 }
 
@@ -39,7 +71,8 @@ def parse_arguments(bot, args: tuple,
         'i_band': [],
         'i_school_year': [],
         'i_attribute': [],
-        'i_rarity': []
+        'i_rarity': [],
+        'instrument': []
     }
 
     for arg in args:
@@ -50,10 +83,6 @@ def parse_arguments(bot, args: tuple,
     for arg_type in parsed_args:
         parsed_args[arg_type] = list(set(parsed_args[arg_type]))
 
-    # Remove mutiple values from fields not supported
-    if not allow_unsupported_lists:
-        for key in ('i_attribute', 'i_school_year'):
-            parsed_args[key] = parsed_args[key][:1]
     return parsed_args
 
 
@@ -92,6 +121,13 @@ def _parse_argument(bot, arg: str) -> list:
         return [('i_attribute', arg.title())]
     if arg in ('power, powerful'):
         return [('i_attribute', 'Power')]
+
+    # Check for instrument
+    instruments = [
+        'dj', 'drums', 'guitar', 'guitar/vocals', 'keytar', 'bass', 'keyboard'
+    ]
+    if arg in instruments:
+        return [('instrument', arg.title())]
 
     # Check for rarity
     if arg.lower() in ALIASES['i_rarity'].items():

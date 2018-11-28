@@ -49,6 +49,7 @@ class Play:
             Idol first name (Kasumi, Ran, ...)
             Attribute (powerful, pure, cool, happy)
             Year (first, second, third)
+            Instrument(vocals, drums, guitar, bass, dj, keytar, keyboard)
         """
         play = PlayHandler(
             self.bot, ctx.message.author, 'star', 1, False, args)
@@ -69,6 +70,7 @@ class Play:
             Idol first name (Kasumi, Ran, ...)
             Attribute (powerful, pure, cool, happy)
             Year (first, second, third)
+            Instrument(vocals, drums, guitar, bass, dj, keytar, keyboard)
         """
         play = PlayHandler(
             self.bot, ctx.message.author, 'star', 10, True, args)
@@ -89,6 +91,7 @@ class Play:
             Idol first name (Kasumi, Ran, ...)
             Attribute (powerful, pure, cool, happy)
             Year (first, second, third)
+            Instrument(vocals, drums, guitar, bass, dj, keytar, keyboard)
         """
         play = PlayHandler(
             self.bot, ctx.message.author, 'star', 5, True, args)

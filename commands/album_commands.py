@@ -22,7 +22,8 @@ SORTS = [
     'school_year',
     'date',
     'band',
-    'newest'
+    'newest',
+    'instrument'
 ]
 
 # Dictionary mapping user ids to last used album arguments
@@ -170,6 +171,9 @@ def _apply_filter(album: list, user: User):
         # Looping backwards since we are removing elements
         for i in range(len(album) - 1, -1, -1):
             # Generic case
+            print(filter_type)
+            print(filter_values)
+            print(album[i])
             if album[i][filter_type] not in filter_values:
                 album.pop(i)
 
@@ -272,7 +276,8 @@ def _parse_album_arguments(bot, args: tuple, user: User):
                 'i_band': [],
                 'i_school_year': [],
                 'i_attribute': [],
-                'i_rarity': []
+                'i_rarity': [],
+                'instrument': []
             }
 
         # Parse sort
@@ -302,7 +307,8 @@ def _get_new_user_args():
             'i_band': [],
             'i_school_year': [],
             'i_attribute': [],
-            'i_rarity': []
+            'i_rarity': [],
+            'instrument': []
         },
         'sort': None,
         'order': None  # Sort by ID if None

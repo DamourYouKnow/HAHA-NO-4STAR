@@ -4,7 +4,7 @@ ALIASES = {
         'rimirin': 'Rimi Ushigome',
         'choco': 'Rimi Ushigome',
         'cornet': 'Rimi Ushigome',
-        'o-tao': 'Tae Hanazono',
+        'o-tae': 'Tae Hanazono',
         'tsugu': 'Tsugumi Hazawa',
         'tsugurific': 'Tsugumi Hazawa',
         'rinrin': 'Rinko Shirokane',

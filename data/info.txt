@@ -1,16 +1,28 @@
-**2018-04-07:**:
-We've just launched!
-
 Invite me to your server here: <https://discordapp.com/oauth2/authorize?client_id=431977892226793472&scope=bot&permissions=0>
-
 
 Instructions for how to use the bot can be found here:
 <https://github.com/DamourYouKnow/HAHA-NO-4STAR/blob/master/README.md>
 
+There is also a Love Live! School Idol Festival version of me:
+<https://github.com/DamourYouKnow/HAHA-NO-UR/blob/master/README.md>
 
 If you have any suggestions for new features or improvements contact D'Amour#0001 on discord or submit a request on our dev channel or on github:
 https://discord.gg/aEkzE59
 <https://github.com/DamourYouKnow/HAHA-NO-4STAR/issues>
 
-
 Feel free to add this bot to your own server or host your own version of it. If you are interested in contributing to the bot please contact me. I'm willing to teach so don't worry about not having any programming experience.
+
+Changelog <https://github.com/DamourYouKnow/HAHA-NO-4STAR/blob/master/CHANGELOG.md>:
+```
+## 1.1.0 | 2018-12-01
+
+### Added
+- Member aliases are finally a thing.
+- You can now filter members by the instrument that they play. 
+- Added `$play5` scam gacha command. Energy drinks not included.
+- Feedback now logs your discriminator so that I can actually get in touch 
+with people for clarification purposes.
+
+### Fixed
+- The power attribute filter used to not work. It works now. 
+```

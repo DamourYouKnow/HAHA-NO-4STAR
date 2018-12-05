@@ -70,7 +70,7 @@ class AlbumCounter:
     def run_count(self):
         for card in self.album:
             curr_count = card['count']
-            self.total_count += 1
+            self.total_count += curr_count
             self.rarity_counts[card['i_rarity']] += curr_count
             self.attribute_counts[card['i_attribute']] += curr_count
 

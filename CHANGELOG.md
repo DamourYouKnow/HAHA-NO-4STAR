@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.1.1 | 2018-12-04
+
+### Fixed
+- The `mystats` command now displays the correct total card count.
+
 ## 1.1.0 | 2018-12-01
 
 ### Added

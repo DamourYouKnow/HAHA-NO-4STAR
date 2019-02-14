@@ -3,7 +3,7 @@
 A discord bot that somewhat accurately depicts plays in Bang Dream: Girls Band Party!
 
 To add the bot to your server:  
-https://discordapp.com/oauth2/authorize?client_id=431977892226793472&scope=bot&permissions=0
+https://discordapp.com/oauth2/authorize?client_id=431977892226793472&scope=bot&permissions=52224
 
 # Commands
 [args] represents optional arguments  

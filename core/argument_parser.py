@@ -21,7 +21,9 @@ ALIASES = {
         'fortnite': 'Kokoro Tsurumaki',
         'hoh': 'Himari Uehara',
         'gamer': 'Ako Udagawa',
-        'tatoe': 'Yukina Minato'
+        'tatoe': 'Yukina Minato',
+        'sans': 'Moca Aoba',
+        'undertale': 'Moca Aoba'
     },
     'i_band': {
         'poppin': "Poppin' Party",

@@ -1,6 +1,6 @@
 # HAHA-NO-4STAR
 
-A discord bot that somewhat accurately depicts plays in Bang Dream: Girls Band Party!
+A discord bot that somewhat accurately depicts plays in BanG Dream: Girls Band Party!
 
 To add the bot to your server:  
 https://discordapp.com/oauth2/authorize?client_id=431977892226793472&scope=bot&permissions=52224
@@ -22,6 +22,6 @@ https://discordapp.com/oauth2/authorize?client_id=431977892226793472&scope=bot&p
 # Acknowledgements
 This bot would not have been possible without the following projects:  
 
-- Bang Dream: Girls Band API https://github.com/MagiCircles/BanGDream/wiki/BanG-Dream!-Girls-Band-API  
+- BanG Dream: Girls Band API https://github.com/MagiCircles/BanGDream/wiki/BanG-Dream!-Girls-Band-API  
 - discord.py https://github.com/Rapptz/discord.py  
 - Python Pillow https://python-pillow.org/  

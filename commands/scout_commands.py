@@ -97,3 +97,45 @@ class Play:
             self.bot, ctx.message.author, 'star', 5, True, args)
         image = await play.do_scout()
         await self.__handle_result(ctx, play.results, image)
+
+    @commands.command(pass_context=True, aliases=['10playdf'])
+    @commands.cooldown(rate=3, per=2.5, type=commands.BucketType.user)
+    @commands.check(check_mongo)
+    async def playdf10(self, ctx, *args: str):
+        """
+        Description: |
+            10 play with DreamFes rates.
+
+            **Rates:** 2star: 88.5%, 3star: 5.5%, 4star: 6.0%
+        Optional Arguments: |
+            Main unit name (Poppin' Party, Afterglow)
+            Idol first name (Kasumi, Ran, ...)
+            Attribute (powerful, pure, cool, happy)
+            Year (first, second, third)
+            Instrument(vocals, drums, guitar, bass, dj, keytar, keyboard)
+        """
+        play = PlayHandler(
+            self.bot, ctx.message.author, 'df', 10, True, args)
+        image = await play.do_scout()
+        await self.__handle_result(ctx, play.results, image)
+
+    @commands.command(pass_context=True, aliases=['1playdf', 'playdf'])
+    @commands.cooldown(rate=5, per=2.5, type=commands.BucketType.user)
+    @commands.check(check_mongo)
+    async def playdf1(self, ctx, *args: str):
+        """
+        Description: |
+            Solo play with DreamFes.
+
+            **Rates:** 2star: 88.5%, 3star: 5.5%, 4star: 6.0%
+        Optional Arguments: |
+            Main unit name (Poppin' Party, Afterglow)
+            Idol first name (Kasumi, Ran, ...)
+            Attribute (powerful, pure, cool, happy)
+            Year (first, second, third)
+            Instrument(vocals, drums, guitar, bass, dj, keytar, keyboard)
+        """
+        play = PlayHandler(
+            self.bot, ctx.message.author, 'df', 1, False, args)
+        image = await play.do_scout()
+        await self.__handle_result(ctx, play.results, image)

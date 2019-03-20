@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.2.0 | 2018-03-19
+
+### Added
+- Added `!playdf10` and `!playdf` commands.
+
 ## 1.1.1 | 2018-12-04
 
 ### Fixed

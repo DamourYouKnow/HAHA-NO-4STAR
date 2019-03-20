@@ -14,15 +14,13 @@ Feel free to add this bot to your own server or host your own version of it. If 
 
 Changelog <https://github.com/DamourYouKnow/HAHA-NO-4STAR/blob/master/CHANGELOG.md>:
 ```
-## 1.1.0 | 2018-12-01
+## 1.2.0 | 2018-03-19
 
 ### Added
-- Member aliases are finally a thing.
-- You can now filter members by the instrument that they play. 
-- Added `$play5` scam gacha command. Energy drinks not included.
-- Feedback now logs your discriminator so that I can actually get in touch 
-with people for clarification purposes.
+- Added `!playdf10` and `!playdf` commands.
+
+## 1.1.1 | 2018-12-04
 
 ### Fixed
-- The power attribute filter used to not work. It works now. 
+- The `mystats` command now displays the correct total card count.
 ```

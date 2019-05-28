@@ -39,7 +39,6 @@ def main():
         Album(bot), 
         Info(bot), 
         Stats(bot), 
-        Trivia(bot), 
         Config(bot)
     ]
 

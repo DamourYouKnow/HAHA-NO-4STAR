@@ -13,7 +13,7 @@ from core.image_generator import create_image, get_one_img, \
 
 RATES = {
     "star": {1: 0.00, 2: 0.885, 3: 0.085, 4: 0.03},
-    "df": {1: 0.00, 2: 0.885, 3: 0.055, 4: 0.06}
+    "df": {1: 0.00, 2: 0.855, 3: 0.085, 4: 0.06}
 }
 
 

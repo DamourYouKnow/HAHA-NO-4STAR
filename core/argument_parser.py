@@ -23,7 +23,8 @@ ALIASES = {
         'gamer': 'Ako Udagawa',
         'tatoe': 'Yukina Minato',
         'sans': 'Moca Aoba',
-        'undertale': 'Moca Aoba'
+        'undertale': 'Moca Aoba',
+        'toko': 'Kirigaya Touko'
     },
     'i_band': {
         'poppin': "Poppin' Party",

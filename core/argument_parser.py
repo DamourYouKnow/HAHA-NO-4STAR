@@ -37,7 +37,9 @@ ALIASES = {
         'pastel': 'Pastel*Palettes',
         'palettes': 'Pastel*Palettes',
         'pastel*palettes': 'Pastel*Palettes',
-        'roselia': 'Roselia'
+        'roselia': 'Roselia',
+        'morfonica': 'Morfonica',
+        'monica': 'Morfonica'
     },
     'i_rarity': {
         '1star': 1,

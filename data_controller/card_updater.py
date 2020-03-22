@@ -120,7 +120,7 @@ def upsert_card(db, card: dict):
 
 
 def validate_card(card: dict) -> bool:
-    if not card['name']:
+    if not card['i_skill_type']:
         return False
     if not card['image'] and not card['image_trained']:
         return False

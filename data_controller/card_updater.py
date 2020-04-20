@@ -3,6 +3,7 @@ import requests
 import time
 import copy
 from pymongo import MongoClient
+from datetime import datetime
 
 MAX_UPDATE_SIZE = 15
 API = 'https://bandori.party/api/'
@@ -120,7 +121,7 @@ def upsert_card(db, card: dict):
 
 
 def validate_card(card: dict) -> bool:
-    if not card['i_skill_type']:
+    if datetime.today().strftime('%Y-%m-%d') <= card['release_date']:
         return False
     if not card['image'] and not card['image_trained']:
         return False
